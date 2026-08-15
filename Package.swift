@@ -42,7 +42,8 @@ let package = Package(
             name: "NetworkService"
         ),
         .target(
-            name: "DesignSystem"
+            name: "DesignSystem",
+            resources: [.process("Assets.xcassets")]
         ),
         .testTarget(
             name: "DesignSystemTests",
