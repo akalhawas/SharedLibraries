@@ -7,6 +7,7 @@ import Testing
 import Foundation
 @testable import Navigation
 
+@MainActor
 struct DeepLinkRouterTests {
 
     @Test func resolvesUsingTheMapperThatMatchesTheURL() {
