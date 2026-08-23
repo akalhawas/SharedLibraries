@@ -5,6 +5,9 @@
 //  Created by ali alhawas on 23/08/2026.
 //
 
+/// Wraps a closure so it can ride along on a `Hashable` route/destination
+/// without the enclosing enum needing hand-written `Equatable`/`Hashable`
+/// conformance.
 public final class ActionCallback<Value>: Hashable {
     public let action: (Value) -> Void
 
