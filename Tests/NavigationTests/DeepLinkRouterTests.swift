@@ -12,17 +12,17 @@ struct DeepLinkRouterTests {
 
     @Test func resolvesUsingTheMapperThatMatchesTheURL() {
         let router = DeepLinkRouter(mappers: [
-            StubMapper(host: "featureA", destination: DummyDestination.main),
-            StubMapper(host: "featureB", destination: DummyDestination.detail(id: "1")),
+            StubMapper(host: "featureA", route: AnyRoute(DummyRoute.main)),
+            StubMapper(host: "featureB", route: AnyRoute(DummyRoute.detail(id: "1"))),
         ])
 
-        let resolved = router.resolve(url: URL(string: "myapp://featureB/path")!) as? DummyDestination
-        #expect(resolved == .detail(id: "1"))
+        let resolved = router.resolve(url: URL(string: "myapp://featureB/path")!)
+        #expect(resolved == AnyRoute(DummyRoute.detail(id: "1")))
     }
 
     @Test func returnsNilWhenNoMapperMatches() {
         let router = DeepLinkRouter(mappers: [
-            StubMapper(host: "featureA", destination: DummyDestination.main),
+            StubMapper(host: "featureA", route: AnyRoute(DummyRoute.main)),
         ])
 
         let resolved = router.resolve(url: URL(string: "myapp://unknown/path")!)
@@ -38,22 +38,22 @@ struct DeepLinkRouterTests {
     @Test func earlierMapperWinsOverALaterMapperThatWouldAlsoMatch() {
         // Mappers are evaluated in array order; the first non-nil result wins.
         let router = DeepLinkRouter(mappers: [
-            StubMapper(host: "shared", destination: DummyDestination.main),
-            StubMapper(host: "shared", destination: DummyDestination.detail(id: "ignored")),
+            StubMapper(host: "shared", route: AnyRoute(DummyRoute.main)),
+            StubMapper(host: "shared", route: AnyRoute(DummyRoute.detail(id: "ignored"))),
         ])
 
-        let resolved = router.resolve(url: URL(string: "myapp://shared")!) as? DummyDestination
-        #expect(resolved == .main)
+        let resolved = router.resolve(url: URL(string: "myapp://shared")!)
+        #expect(resolved == AnyRoute(DummyRoute.main))
     }
 
     @Test func skipsNonMatchingMappersBeforeFindingAMatch() {
         let router = DeepLinkRouter(mappers: [
-            StubMapper(host: "featureA", destination: DummyDestination.main),
-            StubMapper(host: "featureC", destination: DummyDestination.detail(id: "irrelevant")),
-            StubMapper(host: "featureB", destination: DummyDestination.detail(id: "2")),
+            StubMapper(host: "featureA", route: AnyRoute(DummyRoute.main)),
+            StubMapper(host: "featureC", route: AnyRoute(DummyRoute.detail(id: "irrelevant"))),
+            StubMapper(host: "featureB", route: AnyRoute(DummyRoute.detail(id: "2"))),
         ])
 
-        let resolved = router.resolve(url: URL(string: "myapp://featureB")!) as? DummyDestination
-        #expect(resolved == .detail(id: "2"))
+        let resolved = router.resolve(url: URL(string: "myapp://featureB")!)
+        #expect(resolved == AnyRoute(DummyRoute.detail(id: "2")))
     }
 }

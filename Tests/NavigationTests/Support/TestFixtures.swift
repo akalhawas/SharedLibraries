@@ -46,10 +46,10 @@ enum DummyDestination: NavigationDestination {
 /// `DeepLinkRouter`'s mapper-ordering behavior.
 struct StubMapper: DeepLinkMapper {
     let host: String
-    let destination: any NavigationDestination
+    let route: AnyRoute
 
-    func map(url: URL) -> (any NavigationDestination)? {
+    func map(url: URL) -> AnyRoute? {
         guard url.host == host else { return nil }
-        return destination
+        return route
     }
 }

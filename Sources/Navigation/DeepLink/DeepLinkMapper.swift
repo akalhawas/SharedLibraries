@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-/// Maps an incoming URL to a strongly typed ``NavigationDestination``.
+/// Maps an incoming URL directly to a route.
 public protocol DeepLinkMapper {
-    /// Attempts to map the given URL to a navigation destination.
+    /// Attempts to map the given URL to a route.
     ///
     /// - Parameter url: The incoming deep link URL.
-    /// - Returns: A ``NavigationDestination`` if the URL is supported;
-    ///   otherwise, `nil`.
-    func map(url: URL) -> (any NavigationDestination)?
+    /// - Returns: An ``AnyRoute`` if the URL is supported; otherwise, `nil`.
+    func map(url: URL) -> AnyRoute?
 }

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// Resolves incoming URLs into ``NavigationDestination`` values using the
-/// registered ``DeepLinkMapper`` implementations.
+/// Resolves incoming URLs into routes using the registered ``DeepLinkMapper``
+/// implementations.
 @MainActor
 public final class DeepLinkRouter {
 
@@ -28,18 +28,17 @@ public final class DeepLinkRouter {
         mappers.append(mapper)
     }
 
-    /// Resolves a URL into a navigation destination.
+    /// Resolves a URL into a route.
     ///
     /// The registered mappers are evaluated in order until one returns a
-    /// matching destination.
+    /// matching route.
     ///
     /// - Parameter url: The incoming deep link URL.
-    /// - Returns: The resolved ``NavigationDestination`` if one exists;
-    ///   otherwise, `nil`.
-    public func resolve(url: URL) -> (any NavigationDestination)? {
+    /// - Returns: The resolved ``AnyRoute`` if one exists; otherwise, `nil`.
+    public func resolve(url: URL) -> AnyRoute? {
         for mapper in mappers {
-            if let destination = mapper.map(url: url) {
-                return destination
+            if let route = mapper.map(url: url) {
+                return route
             }
         }
         assertionFailure("No mapper resolved url: \(url)")
