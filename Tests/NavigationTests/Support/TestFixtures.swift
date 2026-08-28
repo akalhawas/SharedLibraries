@@ -10,14 +10,14 @@ struct DummyScreen: View {
     var body: some View { Text("Dummy") }
 }
 
-/// A minimal concrete `Route` used to exercise `NavigationCoordinator`,
+/// A minimal concrete `Route` used to exercise `NavigationRouter`,
 /// `AnyRoute`, and `RouteRegistry` without depending on a real feature module.
 enum DummyRoute: Route {
     case main
     case detail(id: String)
     case other
 
-    func makeView(coordinator: NavigationCoordinator) -> some View {
+    func makeView(coordinator: NavigationRouter) -> some View {
         DummyScreen()
     }
 }
@@ -28,7 +28,7 @@ enum DummyRoute: Route {
 enum CustomDetentRoute: Route {
     case screen
 
-    func makeView(coordinator: NavigationCoordinator) -> some View {
+    func makeView(coordinator: NavigationRouter) -> some View {
         DummyScreen()
     }
 

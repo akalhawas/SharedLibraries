@@ -36,7 +36,7 @@ public struct AnyRoute: Hashable, Identifiable {
 
     /// Builds the destination view for the wrapped route.
     @MainActor
-    public func makeView(coordinator: NavigationCoordinator) -> some View {
+    public func makeView(coordinator: NavigationRouter) -> some View {
         viewBox.makeView(coordinator: coordinator)
     }
 
@@ -60,14 +60,14 @@ public struct AnyRoute: Hashable, Identifiable {
 /// operation that actually requires the main actor — is isolated.
 private protocol AnyRouteBoxing {
     @MainActor
-    func makeView(coordinator: NavigationCoordinator) -> AnyView
+    func makeView(coordinator: NavigationRouter) -> AnyView
 }
 
 private struct RouteBox<R: Route>: AnyRouteBoxing {
     let route: R
 
     @MainActor
-    func makeView(coordinator: NavigationCoordinator) -> AnyView {
+    func makeView(coordinator: NavigationRouter) -> AnyView {
         AnyView(route.makeView(coordinator: coordinator))
     }
 }

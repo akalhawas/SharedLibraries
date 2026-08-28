@@ -15,11 +15,11 @@ import SwiftUI
 /// - feature entry points
 @MainActor
 public struct NavigationHost<Root: View>: View {
-    @ObservedObject private var coordinator: NavigationCoordinator
+    @ObservedObject private var coordinator: NavigationRouter
     private let root: Root
 
     public init(
-        coordinator: NavigationCoordinator,
+        coordinator: NavigationRouter,
         @ViewBuilder root: () -> Root
     ) {
         self.coordinator = coordinator

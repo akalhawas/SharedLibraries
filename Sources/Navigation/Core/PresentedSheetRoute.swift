@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Wraps a route presented modally with an isolated navigation stack.
 ///
-/// Each instance owns its own `NavigationCoordinator`.
+/// Each instance owns its own `NavigationRouter`.
 public struct PresentedSheetRoute: Identifiable, Equatable {
     public let id = UUID()
     public let route: AnyRoute

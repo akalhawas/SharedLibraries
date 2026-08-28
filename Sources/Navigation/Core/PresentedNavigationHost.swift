@@ -14,7 +14,7 @@ import SwiftUI
 /// - full-screen flows
 /// - nested modal navigation
 public struct PresentedNavigationHost: View {
-    @StateObject private var coordinator = NavigationCoordinator()
+    @StateObject private var coordinator = NavigationRouter()
     private let route: AnyRoute
 
     public init(route: AnyRoute) {

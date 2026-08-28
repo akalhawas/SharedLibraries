@@ -18,7 +18,7 @@ public protocol Route: Hashable {
     /// Builds the destination view for this route.
     @MainActor
     @ViewBuilder
-    func makeView(coordinator: NavigationCoordinator) -> Screen
+    func makeView(coordinator: NavigationRouter) -> Screen
 
     /// Sheet detent configuration used when this route is presented via
     /// `presentSheet` without explicit `detents`.
@@ -26,7 +26,7 @@ public protocol Route: Hashable {
     /// Declared as a protocol requirement (rather than only an extension
     /// member) so a conforming type's override is actually honored when
     /// accessed through generic `Route`-constrained code, e.g. `AnyRoute`
-    /// and `NavigationCoordinator.presentSheet`.
+    /// and `NavigationRouter.presentSheet`.
     var sheetDetents: Set<PresentationDetent> { get }
 }
 

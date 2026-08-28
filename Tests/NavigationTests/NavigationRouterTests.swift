@@ -1,5 +1,5 @@
 //
-//  NavigationCoordinatorTests.swift
+//  NavigationRouterTests.swift
 //  NavigationTests
 //
 
@@ -8,19 +8,19 @@ import SwiftUI
 @testable import Navigation
 
 @MainActor
-struct NavigationCoordinatorTests {
+struct NavigationRouterTests {
 
     // MARK: - Push
 
     @Test func navigatePushesOntoAnEmptyStack() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         #expect(coordinator.routes.count == 1)
         #expect(coordinator.routes.first?.matches(DummyRoute.main) == true)
     }
 
     @Test func navigatePushesInCallOrder() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         #expect(coordinator.routes.count == 2)
@@ -29,14 +29,14 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func navigateDefaultsToPushStrategy() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.other)
         #expect(coordinator.routes.count == 2)
     }
 
     @Test func navigateAcceptsAPreErasedAnyRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: AnyRoute(DummyRoute.main))
         #expect(coordinator.routes.count == 1)
     }
@@ -44,7 +44,7 @@ struct NavigationCoordinatorTests {
     // MARK: - Reset stack
 
     @Test func resetStackReplacesAnExistingStackWithASingleRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.navigate(to: DummyRoute.other, strategy: .resetStack)
@@ -53,7 +53,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func resetStackOnAnEmptyStackPushesTheRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main, strategy: .resetStack)
         #expect(coordinator.routes.count == 1)
     }
@@ -61,7 +61,7 @@ struct NavigationCoordinatorTests {
     // MARK: - popToIfExists
 
     @Test func popToIfExistsTrimsBackToAnExistingMatch() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.navigate(to: DummyRoute.other)
@@ -71,7 +71,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popToIfExistsKeepsEverythingUpToAndIncludingTheMatch() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.navigate(to: DummyRoute.other)
@@ -81,7 +81,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popToIfExistsPushesWhenTheRouteIsNotOnTheStack() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"), strategy: .popToIfExists)
         #expect(coordinator.routes.count == 2)
@@ -91,7 +91,7 @@ struct NavigationCoordinatorTests {
     // MARK: - pop
 
     @Test func popRemovesTheTopRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.pop()
@@ -100,7 +100,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popWithCountRemovesThatManyRoutes() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.navigate(to: DummyRoute.other)
@@ -110,7 +110,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popClampsToTheStackSizeRatherThanTrapping() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.pop(count: 99)
@@ -118,13 +118,13 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popOnAnEmptyStackIsANoOp() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.pop()
         #expect(coordinator.routes.isEmpty)
     }
 
     @Test func popWithZeroOrNegativeCountStillPopsExactlyOne() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.pop(count: 0)
@@ -138,7 +138,7 @@ struct NavigationCoordinatorTests {
     // MARK: - popTo(where:)
 
     @Test func popToWhereTrimsBackToTheLastMatch() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.navigate(to: DummyRoute.other)
@@ -147,7 +147,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popToWhereMatchesTheLastOccurrenceOfADuplicatedRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.other)
         coordinator.navigate(to: DummyRoute.main)
@@ -158,7 +158,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popToWhereIsANoOpWhenNothingMatches() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.popTo { $0.matches(DummyRoute.other) }
@@ -168,7 +168,7 @@ struct NavigationCoordinatorTests {
     // MARK: - popToRoot
 
     @Test func popToRootClearsTheEntireStack() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.navigate(to: DummyRoute.main)
         coordinator.navigate(to: DummyRoute.detail(id: "1"))
         coordinator.popToRoot()
@@ -176,7 +176,7 @@ struct NavigationCoordinatorTests {
     }
 
     @Test func popToRootOnAnEmptyStackIsANoOp() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.popToRoot()
         #expect(coordinator.routes.isEmpty)
     }
@@ -184,40 +184,40 @@ struct NavigationCoordinatorTests {
     // MARK: - Sheet presentation
 
     @Test func presentSheetSetsTheSheetItem() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentSheet(DummyRoute.main)
         #expect(coordinator.sheetItem != nil)
         #expect(coordinator.sheetItem?.route.matches(DummyRoute.main) == true)
     }
 
     @Test func presentSheetDefaultsToTheRoutesOwnDetents() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentSheet(CustomDetentRoute.screen)
         #expect(coordinator.sheetItem?.configuration.detents == [.medium])
     }
 
     @Test func presentSheetExplicitDetentsOverrideTheRoutesDefault() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentSheet(DummyRoute.main, detents: [.height(200)])
         #expect(coordinator.sheetItem?.configuration.detents == [.height(200)])
     }
 
     @Test func presentingASecondSheetReplacesTheFirst() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentSheet(DummyRoute.main)
         coordinator.presentSheet(DummyRoute.other)
         #expect(coordinator.sheetItem?.route.matches(DummyRoute.other) == true)
     }
 
     @Test func dismissSheetClearsTheSheetItem() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentSheet(DummyRoute.main)
         coordinator.dismissSheet()
         #expect(coordinator.sheetItem == nil)
     }
 
     @Test func dismissSheetOnAnAlreadyDismissedSheetIsANoOp() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.dismissSheet()
         #expect(coordinator.sheetItem == nil)
     }
@@ -225,13 +225,13 @@ struct NavigationCoordinatorTests {
     // MARK: - Full-screen presentation
 
     @Test func presentFullScreenSetsTheFullScreenRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentFullScreen(DummyRoute.main)
         #expect(coordinator.fullScreenRoute?.matches(DummyRoute.main) == true)
     }
 
     @Test func dismissFullScreenClearsTheFullScreenRoute() {
-        let coordinator = NavigationCoordinator()
+        let coordinator = NavigationRouter()
         coordinator.presentFullScreen(DummyRoute.main)
         coordinator.dismissFullScreen()
         #expect(coordinator.fullScreenRoute == nil)
@@ -240,8 +240,8 @@ struct NavigationCoordinatorTests {
     // MARK: - Independence between instances
 
     @Test func eachCoordinatorOwnsItsOwnStateIndependently() {
-        let a = NavigationCoordinator()
-        let b = NavigationCoordinator()
+        let a = NavigationRouter()
+        let b = NavigationRouter()
         a.navigate(to: DummyRoute.main)
         #expect(a.routes.count == 1)
         #expect(b.routes.isEmpty)

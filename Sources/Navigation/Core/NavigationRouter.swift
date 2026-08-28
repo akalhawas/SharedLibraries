@@ -1,5 +1,5 @@
 //
-//  NavigationCoordinator.swift
+//  NavigationRouter.swift
 //  ModularizedByFeature
 //
 //  Created by ali alhawas on 31/03/2026.
@@ -10,12 +10,12 @@ import Combine
 
 /// Manages navigation state for a single navigation flow.
 ///
-/// Use one coordinator per independent navigation stack.
+/// Use one router per independent navigation stack.
 /// - For root or tab flows: inject and own it from outside.
-/// - For presented modal flows: create a fresh coordinator internally.
+/// - For presented modal flows: create a fresh router internally.
 ///
 @MainActor
-public final class NavigationCoordinator: ObservableObject {
+public final class NavigationRouter: ObservableObject {
     
     @Published public var routes: [AnyRoute] = []
     @Published public var fullScreenRoute: AnyRoute?
