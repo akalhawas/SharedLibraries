@@ -29,6 +29,7 @@ public struct NavigationHost<Root: View>: View {
     public var body: some View {
         NavigationStack(path: $router.routes) {
             root
+                .environmentObject(router)
                 .navigationDestination(for: AnyRoute.self) { route in
                     route.makeView(router: router)
                 }
