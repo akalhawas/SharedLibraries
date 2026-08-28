@@ -13,233 +13,233 @@ struct NavigationRouterTests {
     // MARK: - Push
 
     @Test func navigatePushesOntoAnEmptyStack() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        #expect(coordinator.routes.count == 1)
-        #expect(coordinator.routes.first?.matches(DummyRoute.main) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        #expect(router.routes.count == 1)
+        #expect(router.routes.first?.matches(DummyRoute.main) == true)
     }
 
     @Test func navigatePushesInCallOrder() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        #expect(coordinator.routes.count == 2)
-        #expect(coordinator.routes[0].matches(DummyRoute.main))
-        #expect(coordinator.routes[1].matches(DummyRoute.detail(id: "1")))
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        #expect(router.routes.count == 2)
+        #expect(router.routes[0].matches(DummyRoute.main))
+        #expect(router.routes[1].matches(DummyRoute.detail(id: "1")))
     }
 
     @Test func navigateDefaultsToPushStrategy() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.other)
-        #expect(coordinator.routes.count == 2)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.other)
+        #expect(router.routes.count == 2)
     }
 
     @Test func navigateAcceptsAPreErasedAnyRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: AnyRoute(DummyRoute.main))
-        #expect(coordinator.routes.count == 1)
+        let router = NavigationRouter()
+        router.navigate(to: AnyRoute(DummyRoute.main))
+        #expect(router.routes.count == 1)
     }
 
     // MARK: - Reset stack
 
     @Test func resetStackReplacesAnExistingStackWithASingleRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.navigate(to: DummyRoute.other, strategy: .resetStack)
-        #expect(coordinator.routes.count == 1)
-        #expect(coordinator.routes.first?.matches(DummyRoute.other) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.navigate(to: DummyRoute.other, strategy: .resetStack)
+        #expect(router.routes.count == 1)
+        #expect(router.routes.first?.matches(DummyRoute.other) == true)
     }
 
     @Test func resetStackOnAnEmptyStackPushesTheRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main, strategy: .resetStack)
-        #expect(coordinator.routes.count == 1)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main, strategy: .resetStack)
+        #expect(router.routes.count == 1)
     }
 
     // MARK: - popToIfExists
 
     @Test func popToIfExistsTrimsBackToAnExistingMatch() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.navigate(to: DummyRoute.other)
-        coordinator.navigate(to: DummyRoute.main, strategy: .popToIfExists)
-        #expect(coordinator.routes.count == 1)
-        #expect(coordinator.routes.first?.matches(DummyRoute.main) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.navigate(to: DummyRoute.other)
+        router.navigate(to: DummyRoute.main, strategy: .popToIfExists)
+        #expect(router.routes.count == 1)
+        #expect(router.routes.first?.matches(DummyRoute.main) == true)
     }
 
     @Test func popToIfExistsKeepsEverythingUpToAndIncludingTheMatch() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.navigate(to: DummyRoute.other)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"), strategy: .popToIfExists)
-        #expect(coordinator.routes.count == 2)
-        #expect(coordinator.routes.last?.matches(DummyRoute.detail(id: "1")) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.navigate(to: DummyRoute.other)
+        router.navigate(to: DummyRoute.detail(id: "1"), strategy: .popToIfExists)
+        #expect(router.routes.count == 2)
+        #expect(router.routes.last?.matches(DummyRoute.detail(id: "1")) == true)
     }
 
     @Test func popToIfExistsPushesWhenTheRouteIsNotOnTheStack() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"), strategy: .popToIfExists)
-        #expect(coordinator.routes.count == 2)
-        #expect(coordinator.routes.last?.matches(DummyRoute.detail(id: "1")) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"), strategy: .popToIfExists)
+        #expect(router.routes.count == 2)
+        #expect(router.routes.last?.matches(DummyRoute.detail(id: "1")) == true)
     }
 
     // MARK: - pop
 
     @Test func popRemovesTheTopRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.pop()
-        #expect(coordinator.routes.count == 1)
-        #expect(coordinator.routes.first?.matches(DummyRoute.main) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.pop()
+        #expect(router.routes.count == 1)
+        #expect(router.routes.first?.matches(DummyRoute.main) == true)
     }
 
     @Test func popWithCountRemovesThatManyRoutes() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.navigate(to: DummyRoute.other)
-        coordinator.pop(count: 2)
-        #expect(coordinator.routes.count == 1)
-        #expect(coordinator.routes.first?.matches(DummyRoute.main) == true)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.navigate(to: DummyRoute.other)
+        router.pop(count: 2)
+        #expect(router.routes.count == 1)
+        #expect(router.routes.first?.matches(DummyRoute.main) == true)
     }
 
     @Test func popClampsToTheStackSizeRatherThanTrapping() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.pop(count: 99)
-        #expect(coordinator.routes.isEmpty)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.pop(count: 99)
+        #expect(router.routes.isEmpty)
     }
 
     @Test func popOnAnEmptyStackIsANoOp() {
-        let coordinator = NavigationRouter()
-        coordinator.pop()
-        #expect(coordinator.routes.isEmpty)
+        let router = NavigationRouter()
+        router.pop()
+        #expect(router.routes.isEmpty)
     }
 
     @Test func popWithZeroOrNegativeCountStillPopsExactlyOne() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.pop(count: 0)
-        #expect(coordinator.routes.count == 1)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.pop(count: 0)
+        #expect(router.routes.count == 1)
 
-        coordinator.navigate(to: DummyRoute.detail(id: "2"))
-        coordinator.pop(count: -5)
-        #expect(coordinator.routes.count == 1)
+        router.navigate(to: DummyRoute.detail(id: "2"))
+        router.pop(count: -5)
+        #expect(router.routes.count == 1)
     }
 
     // MARK: - popTo(where:)
 
     @Test func popToWhereTrimsBackToTheLastMatch() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.navigate(to: DummyRoute.other)
-        coordinator.popTo { $0.matches(DummyRoute.main) }
-        #expect(coordinator.routes.count == 1)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.navigate(to: DummyRoute.other)
+        router.popTo { $0.matches(DummyRoute.main) }
+        #expect(router.routes.count == 1)
     }
 
     @Test func popToWhereMatchesTheLastOccurrenceOfADuplicatedRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.other)
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.popTo { $0.matches(DummyRoute.main) }
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.other)
+        router.navigate(to: DummyRoute.main)
+        router.popTo { $0.matches(DummyRoute.main) }
         // `popTo` uses `lastIndex(where:)`, so it should keep both `.main` entries
         // (index 0 and index 2), not trim back to the first occurrence.
-        #expect(coordinator.routes.count == 3)
+        #expect(router.routes.count == 3)
     }
 
     @Test func popToWhereIsANoOpWhenNothingMatches() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.popTo { $0.matches(DummyRoute.other) }
-        #expect(coordinator.routes.count == 2)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.popTo { $0.matches(DummyRoute.other) }
+        #expect(router.routes.count == 2)
     }
 
     // MARK: - popToRoot
 
     @Test func popToRootClearsTheEntireStack() {
-        let coordinator = NavigationRouter()
-        coordinator.navigate(to: DummyRoute.main)
-        coordinator.navigate(to: DummyRoute.detail(id: "1"))
-        coordinator.popToRoot()
-        #expect(coordinator.routes.isEmpty)
+        let router = NavigationRouter()
+        router.navigate(to: DummyRoute.main)
+        router.navigate(to: DummyRoute.detail(id: "1"))
+        router.popToRoot()
+        #expect(router.routes.isEmpty)
     }
 
     @Test func popToRootOnAnEmptyStackIsANoOp() {
-        let coordinator = NavigationRouter()
-        coordinator.popToRoot()
-        #expect(coordinator.routes.isEmpty)
+        let router = NavigationRouter()
+        router.popToRoot()
+        #expect(router.routes.isEmpty)
     }
 
     // MARK: - Sheet presentation
 
     @Test func presentSheetSetsTheSheetItem() {
-        let coordinator = NavigationRouter()
-        coordinator.presentSheet(DummyRoute.main)
-        #expect(coordinator.sheetItem != nil)
-        #expect(coordinator.sheetItem?.route.matches(DummyRoute.main) == true)
+        let router = NavigationRouter()
+        router.presentSheet(DummyRoute.main)
+        #expect(router.sheetItem != nil)
+        #expect(router.sheetItem?.route.matches(DummyRoute.main) == true)
     }
 
     @Test func presentSheetDefaultsToTheRoutesOwnDetents() {
-        let coordinator = NavigationRouter()
-        coordinator.presentSheet(CustomDetentRoute.screen)
-        #expect(coordinator.sheetItem?.configuration.detents == [.medium])
+        let router = NavigationRouter()
+        router.presentSheet(CustomDetentRoute.screen)
+        #expect(router.sheetItem?.configuration.detents == [.medium])
     }
 
     @Test func presentSheetExplicitDetentsOverrideTheRoutesDefault() {
-        let coordinator = NavigationRouter()
-        coordinator.presentSheet(DummyRoute.main, detents: [.height(200)])
-        #expect(coordinator.sheetItem?.configuration.detents == [.height(200)])
+        let router = NavigationRouter()
+        router.presentSheet(DummyRoute.main, detents: [.height(200)])
+        #expect(router.sheetItem?.configuration.detents == [.height(200)])
     }
 
     @Test func presentingASecondSheetReplacesTheFirst() {
-        let coordinator = NavigationRouter()
-        coordinator.presentSheet(DummyRoute.main)
-        coordinator.presentSheet(DummyRoute.other)
-        #expect(coordinator.sheetItem?.route.matches(DummyRoute.other) == true)
+        let router = NavigationRouter()
+        router.presentSheet(DummyRoute.main)
+        router.presentSheet(DummyRoute.other)
+        #expect(router.sheetItem?.route.matches(DummyRoute.other) == true)
     }
 
     @Test func dismissSheetClearsTheSheetItem() {
-        let coordinator = NavigationRouter()
-        coordinator.presentSheet(DummyRoute.main)
-        coordinator.dismissSheet()
-        #expect(coordinator.sheetItem == nil)
+        let router = NavigationRouter()
+        router.presentSheet(DummyRoute.main)
+        router.dismissSheet()
+        #expect(router.sheetItem == nil)
     }
 
     @Test func dismissSheetOnAnAlreadyDismissedSheetIsANoOp() {
-        let coordinator = NavigationRouter()
-        coordinator.dismissSheet()
-        #expect(coordinator.sheetItem == nil)
+        let router = NavigationRouter()
+        router.dismissSheet()
+        #expect(router.sheetItem == nil)
     }
 
     // MARK: - Full-screen presentation
 
     @Test func presentFullScreenSetsTheFullScreenRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.presentFullScreen(DummyRoute.main)
-        #expect(coordinator.fullScreenRoute?.matches(DummyRoute.main) == true)
+        let router = NavigationRouter()
+        router.presentFullScreen(DummyRoute.main)
+        #expect(router.fullScreenRoute?.matches(DummyRoute.main) == true)
     }
 
     @Test func dismissFullScreenClearsTheFullScreenRoute() {
-        let coordinator = NavigationRouter()
-        coordinator.presentFullScreen(DummyRoute.main)
-        coordinator.dismissFullScreen()
-        #expect(coordinator.fullScreenRoute == nil)
+        let router = NavigationRouter()
+        router.presentFullScreen(DummyRoute.main)
+        router.dismissFullScreen()
+        #expect(router.fullScreenRoute == nil)
     }
 
     // MARK: - Independence between instances
 
-    @Test func eachCoordinatorOwnsItsOwnStateIndependently() {
+    @Test func eachRouterOwnsItsOwnStateIndependently() {
         let a = NavigationRouter()
         let b = NavigationRouter()
         a.navigate(to: DummyRoute.main)

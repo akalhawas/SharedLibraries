@@ -17,7 +17,7 @@ enum DummyRoute: Route {
     case detail(id: String)
     case other
 
-    func makeView(coordinator: NavigationRouter) -> some View {
+    func makeView(router: NavigationRouter) -> some View {
         DummyScreen()
     }
 }
@@ -28,7 +28,7 @@ enum DummyRoute: Route {
 enum CustomDetentRoute: Route {
     case screen
 
-    func makeView(coordinator: NavigationRouter) -> some View {
+    func makeView(router: NavigationRouter) -> some View {
         DummyScreen()
     }
 

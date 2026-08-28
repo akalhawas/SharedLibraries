@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Hosts an existing navigation flow whose coordinator is owned externally.
+/// Hosts an existing navigation flow whose router is owned externally.
 ///
 /// Use this for:
 /// - app roots
@@ -15,30 +15,30 @@ import SwiftUI
 /// - feature entry points
 @MainActor
 public struct NavigationHost<Root: View>: View {
-    @ObservedObject private var coordinator: NavigationRouter
+    @ObservedObject private var router: NavigationRouter
     private let root: Root
 
     public init(
-        coordinator: NavigationRouter,
+        router: NavigationRouter,
         @ViewBuilder root: () -> Root
     ) {
-        self.coordinator = coordinator
+        self.router = router
         self.root = root()
     }
 
     public var body: some View {
-        NavigationStack(path: $coordinator.routes) {
+        NavigationStack(path: $router.routes) {
             root
                 .navigationDestination(for: AnyRoute.self) { route in
-                    route.makeView(coordinator: coordinator)
+                    route.makeView(router: router)
                 }
-                .sheet(item: $coordinator.sheetItem) { item in
+                .sheet(item: $router.sheetItem) { item in
                     PresentedNavigationHost(route: item.route)
                         .presentationDetents(item.configuration.detents)
                         .presentationDragIndicator(.visible)
                 }
 #if os(iOS)
-                .fullScreenCover(item: $coordinator.fullScreenRoute) { route in
+                .fullScreenCover(item: $router.fullScreenRoute) { route in
                     PresentedNavigationHost(route: route)
                 }
 #endif

@@ -18,7 +18,7 @@ public protocol Route: Hashable {
     /// Builds the destination view for this route.
     @MainActor
     @ViewBuilder
-    func makeView(coordinator: NavigationRouter) -> Screen
+    func makeView(router: NavigationRouter) -> Screen
 
     /// Sheet detent configuration used when this route is presented via
     /// `presentSheet` without explicit `detents`.

@@ -67,7 +67,7 @@ struct AnyRouteTests {
 
     @Test func makeViewBuildsAViewWithoutCrashing() {
         let route = AnyRoute(DummyRoute.main)
-        let coordinator = NavigationRouter()
-        _ = route.makeView(coordinator: coordinator)
+        let router = NavigationRouter()
+        _ = route.makeView(router: router)
     }
 }
