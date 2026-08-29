@@ -13,6 +13,10 @@ import SwiftUI
 /// - app roots
 /// - tab roots
 /// - feature entry points
+///
+/// The host injects `router` into the environment of the root view and of
+/// every pushed destination, so a `Route`'s `makeView` does not need to add
+/// `.environmentObject(router)` itself.
 @MainActor
 public struct NavigationHost<Root: View>: View {
     @ObservedObject private var router: NavigationRouter
@@ -32,6 +36,7 @@ public struct NavigationHost<Root: View>: View {
                 .environmentObject(router)
                 .navigationDestination(for: AnyRoute.self) { route in
                     route.makeView(router: router)
+                        .environmentObject(router)
                 }
                 .sheet(item: $router.sheetItem) { item in
                     PresentedNavigationHost(route: item.route)
